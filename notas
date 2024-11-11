@@ -1,0 +1,112 @@
+#include <stdio.h>
+#include <string.h>
+#include <locale.h>
+
+#define MAX_ALUNOS 10
+#define MAX_NOME 100
+
+char nomes[MAX_ALUNOS][MAX_NOME];
+float notas1[MAX_ALUNOS], notas2[MAX_ALUNOS];
+int quantidade = 0;
+
+
+void adicionarAluno() {
+    if (quantidade < MAX_ALUNOS) {
+        printf("\nAdicionando aluno %d:\n", quantidade + 1);
+        printf("Nome: ");
+        scanf(" %[^\n]", nomes[quantidade]);
+
+        printf("Nota 1: ");
+        scanf("%f", &notas1[quantidade]);
+
+        printf("Nota 2: ");
+        scanf("%f", &notas2[quantidade]);
+
+        quantidade++;
+    } else {
+        printf("\nLimite de alunos atingido! Não é possível adicionar mais alunos.\n");
+    }
+}
+
+
+float calcularMedia(int indice) {
+    return (notas1[indice] + notas2[indice]) / 2;
+}
+
+
+void exibirAlunos() {
+    printf("\nLista de Alunos e suas Médias:\n");
+    for (int i = 0; i < quantidade; i++) {
+        printf("Aluno %d:\n", i + 1);
+        printf("Nome: %s\n", nomes[i]);
+        printf("Nota 1: %.2f\n", notas1[i]);
+        printf("Nota 2: %.2f\n", notas2[i]);
+        printf("Média: %.2f\n\n", calcularMedia(i));
+    }
+}
+
+
+void alunoMaiorMedia() {
+    if (quantidade == 0) {
+        printf("\nNenhum aluno cadastrado.\n");
+        return;
+    }
+
+    int indiceMaiorMedia = 0;
+    float maiorMedia = calcularMedia(0);
+
+    for (int i = 1; i < quantidade; i++) {
+        float mediaAtual = calcularMedia(i);
+        if (mediaAtual > maiorMedia) {
+            maiorMedia = mediaAtual;
+            indiceMaiorMedia = i;
+        }
+    }
+
+    printf("\nAluno com a maior média:\n");
+    printf("Nome: %s\n", nomes[indiceMaiorMedia]);
+    printf("Nota 1: %.2f\n", notas1[indiceMaiorMedia]);
+    printf("Nota 2: %.2f\n", notas2[indiceMaiorMedia]);
+    printf("Média: %.2f\n", maiorMedia);
+}
+
+int main() {
+    setlocale(LC_ALL, "Portuguese");
+
+    int opcao;
+
+    do {
+        printf("\nMenu:\n");
+        printf("1. Adicionar aluno e notas\n");
+        printf("2. Calcular e exibir média de cada aluno\n");
+        printf("3. Exibir todos os alunos\n");
+        printf("4. Exibir o aluno com maior média\n");
+        printf("0. Sair\n");
+        printf("Escolha uma opção: ");
+        scanf("%d", &opcao);
+
+        switch (opcao) {
+            case 1:
+                adicionarAluno();
+                break;
+            case 2:
+                printf("\nMédias dos alunos:\n");
+                for (int i = 0; i < quantidade; i++) {
+                    printf("Média do aluno %s: %.2f\n", nomes[i], calcularMedia(i));
+                }
+                break;
+            case 3:
+                exibirAlunos();
+                break;
+            case 4:
+                alunoMaiorMedia();
+                break;
+            case 0:
+                printf("Saindo do programa.\n");
+                break;
+            default:
+                printf("Opção inválida. Tente novamente.\n");
+        }
+    } while (opcao != 0);
+
+}
